@@ -1,7 +1,6 @@
 import 'package:app_bloc/logic/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:app_bloc/screens/home.dart';
-import 'package:app_bloc/themes/my_themes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {

@@ -7,8 +7,7 @@ import '../components/checkout/payment_total.dart';
 import '../models/movie.dart';
 
 class Checkout extends StatelessWidget {
-  const Checkout({Key? key, required this.movie, required this.session})
-      : super(key: key);
+  const Checkout({super.key, required this.movie, required this.session});
   final Movie movie;
   final String session;
 

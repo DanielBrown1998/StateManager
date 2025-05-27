@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PaymentTotal extends StatelessWidget {
-  const PaymentTotal({Key? key, required this.total}) : super(key: key);
+  const PaymentTotal({super.key, required this.total});
   final double total;
 
   @override
