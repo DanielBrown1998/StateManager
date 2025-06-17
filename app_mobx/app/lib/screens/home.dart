@@ -6,14 +6,19 @@ import 'package:provider/provider.dart';
 import '../components/categoria_text.dart';
 import '../components/search_input.dart';
 
-class Home extends StatelessWidget {
-  Home({super.key});
+class Home extends StatefulWidget {
+  const Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   final TextEditingController searchTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<CartStore>(context, listen: false);
+    // final cart = Provider.of<CartStore>(context, listen: false);
     return SafeArea(
       child: Scaffold(
         body: CustomScrollView(
@@ -35,8 +40,8 @@ class Home extends StatelessWidget {
             SliverToBoxAdapter(
               child: ItemList(categoria: "para dividir"),
             ),
-            Observer(
-              builder: (_) => SliverFillRemaining(
+            Consumer<CartStore>(builder: (context, value, child) {
+              return SliverFillRemaining(
                 hasScrollBody: false,
                 child: Align(
                   alignment: Alignment.bottomCenter,
@@ -57,13 +62,18 @@ class Home extends StatelessWidget {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
-                                  child: Text(
-                                    cart.total.toString(),
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary),
+                                  child: Observer(
+                                    builder: (context) => Text(
+                                      value.cartList
+                                          .fold(0,
+                                              (sum, item) => sum + item.count)
+                                          .toString(),
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary),
+                                    ),
                                   ),
                                 ),
                                 Icon(
@@ -87,19 +97,22 @@ class Home extends StatelessWidget {
                           ),
                           Align(
                             alignment: Alignment.centerRight,
-                            child: Text(
-                              "R\$ ${00.00}",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
+                            child: Observer(
+                              builder: (context) => Text(
+                                "R\$ ${value.cartList.fold(0.0, (sum, item) => sum + item.count * item.preco).toStringAsFixed(2)}",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary),
+                              ),
                             ),
                           ),
                         ])),
                   ),
                 ),
-              ),
-            )
+              );
+            })
           ],
         ),
       ),

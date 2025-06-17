@@ -21,7 +21,7 @@ class Contador extends StatelessWidget {
             onTap: () {
               if (itemStore.count > 0) {
                 itemStore.decrement();
-                cart.removeCart();
+                cart.removeItem(item);
               }
             },
             child: const Icon(
@@ -34,7 +34,7 @@ class Contador extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             onTap: () {
               itemStore.increment();
-              cart.addCart();
+              cart.addItem(item);
             },
             child: const Icon(
               Icons.add_circle_outline,
