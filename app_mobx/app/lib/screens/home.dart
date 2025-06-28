@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:panucci_delivery/components/item_list.dart';
+import 'package:panucci_delivery/screens/checkout.dart';
 import 'package:panucci_delivery/store/cart.dart';
 import 'package:provider/provider.dart';
 import '../components/categoria_text.dart';
@@ -18,6 +19,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    BuildContext homeContext = context;
     // final cart = Provider.of<CartStore>(context, listen: false);
     return SafeArea(
       child: Scaffold(
@@ -45,29 +47,63 @@ class _HomeState extends State<Home> {
                 hasScrollBody: false,
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: InkWell(
-                    onTap: () {},
-                    child: Ink(
-                        width: double.infinity,
-                        height: 80,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surfaceTint,
-                            borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(10))),
-                        child: Stack(children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Observer(
-                                    builder: (context) => Text(
-                                      value.cartList
-                                          .fold(0,
-                                              (sum, item) => sum + item.count)
-                                          .toString(),
+                  child: Observer(
+                    builder: (context) => !value.listaVazia
+                        ? InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Checkout(
+                                            homeContext: homeContext,
+                                          )));
+                            },
+                            child: Ink(
+                                width: double.infinity,
+                                height: 80,
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .surfaceTint,
+                                    borderRadius: const BorderRadius.vertical(
+                                        top: Radius.circular(10))),
+                                child: Stack(children: [
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 8.0),
+                                          child: Text(
+                                            value.cartList
+                                                .fold(
+                                                    0,
+                                                    (sum, item) =>
+                                                        sum + item.count)
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary),
+                                          ),
+                                        ),
+                                        Icon(
+                                          Icons.shopping_basket_outlined,
+                                          size: 24,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Ver carrinho",
                                       style: TextStyle(
                                           fontSize: 16,
                                           color: Theme.of(context)
@@ -75,44 +111,26 @@ class _HomeState extends State<Home> {
                                               .onPrimary),
                                     ),
                                   ),
-                                ),
-                                Icon(
-                                  Icons.shopping_basket_outlined,
-                                  size: 24,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                )
-                              ],
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Ver carrinho",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Observer(
-                              builder: (context) => Text(
-                                "R\$ ${value.cartList.fold(0.0, (sum, item) => sum + item.count * item.preco).toStringAsFixed(2)}",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary),
-                              ),
-                            ),
-                          ),
-                        ])),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Observer(
+                                      builder: (context) => Text(
+                                        "R\$ ${value.valorCarrinho.toStringAsFixed(2)}",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary),
+                                      ),
+                                    ),
+                                  ),
+                                ])),
+                          )
+                        : Container(),
                   ),
                 ),
               );
-            })
+            }),
           ],
         ),
       ),
